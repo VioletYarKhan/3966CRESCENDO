@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.68,
-        "y": 6.75
+        "x": 0.8,
+        "y": 6.65
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.18,
-        "y": 7.616025403784438
+        "x": 1.2999999999999998,
+        "y": 7.516025403784439
       },
       "isLocked": false,
       "linkedName": "topSpeaker"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 0.68,
-        "y": 6.75
+        "x": 1.1,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 1.2606929375763516,
-        "y": 7.747499304522418
+        "x": 1.6806929375763517,
+        "y": 7.497499304522418
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,7 +54,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "intakeNote",
       "waypointRelativePos": 0.8,
       "command": {
         "type": "sequential",
@@ -65,6 +65,18 @@
               "data": {
                 "name": "intake"
               }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
+              }
             }
           ]
         }
@@ -72,10 +84,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
     "velocity": 0,

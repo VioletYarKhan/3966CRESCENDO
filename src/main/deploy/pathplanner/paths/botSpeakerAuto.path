@@ -16,28 +16,28 @@
     },
     {
       "anchor": {
-        "x": 2.3260096520193043,
-        "y": 4.141568997423709
+        "x": 2.421132842265685,
+        "y": 4.0606698356253865
       },
       "prevControl": {
-        "x": 1.3282244941626995,
-        "y": 4.075049986899935
+        "x": 1.42334768440908,
+        "y": 3.9941508251016122
       },
       "nextControl": {
-        "x": 2.6952175332922095,
-        "y": 4.1661828561752365
+        "x": 2.79034072353859,
+        "y": 4.085283694376914
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.68,
-        "y": 4.35
+        "x": 0.9,
+        "y": 4.55
       },
       "prevControl": {
-        "x": 1.6245146776007842,
-        "y": 3.1570146473626277
+        "x": 1.8445146776007846,
+        "y": 3.357014647362628
       },
       "nextControl": null,
       "isLocked": false,
@@ -65,6 +65,18 @@
               "data": {
                 "name": "intake"
               }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
+              }
             }
           ]
         }
@@ -72,10 +84,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
     "velocity": 0,

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.68,
-      "y": 6.75
+      "x": 0.8,
+      "y": 6.65
     },
     "rotation": 60.0
   },
@@ -12,34 +12,35 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "toSpeaker"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "parallel",
                 "data": {
-                  "name": "shoot"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "toSpeakerAngled"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "armHold"
+                  "name": "toFloor"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "toFloor"
           }
         },
         {
@@ -49,71 +50,35 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "toSpeaker"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "parallel",
                 "data": {
-                  "name": "shoot"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "toSpeakerAngled"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "armHold"
+                  "name": "toFloor"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "toFloor"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "topSpeakerMidNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "toSpeaker"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "armHold"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "toFloor"
           }
         }
       ]

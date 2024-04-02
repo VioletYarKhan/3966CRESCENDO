@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3509924162705473,
+      "x": 1.4,
       "y": 5.55593454044051
     },
     "rotation": 0
@@ -12,13 +12,13 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "toSpeaker"
+                  "name": "toSpeakerFlat"
                 }
               },
               {
@@ -49,13 +49,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
+                  "name": "toSpeakerFlat"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "toSpeaker"
+                  "name": "shoot"
                 }
               }
             ]

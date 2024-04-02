@@ -29,10 +29,20 @@ public class Arm extends SubsystemBase {
         armR.set(0.2);
     }
 
+    public void armUpMacro() {
+        armL.set(0.15);
+        armR.set(-0.15);
+    }
+
+    public void armDownMacro() {
+        armL.set(-0.125);
+        armR.set(0.125);
+    }
+
     public void armHold() {
-        if(armEncoder.getPosition() < (startAngle + 22)){
-            armL.set(0.04);
-            armR.set(-0.04);
+        if(armEncoder.getPosition() < (startAngle + 30)){
+            armL.set(0.03);
+            armR.set(-0.03);
         } else {
             armL.set(0);
             armR.set(0);

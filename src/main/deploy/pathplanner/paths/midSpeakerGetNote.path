@@ -32,11 +32,11 @@
     },
     {
       "anchor": {
-        "x": 1.6,
+        "x": 1.4,
         "y": 5.55593454044051
       },
       "prevControl": {
-        "x": 2.100000000000003,
+        "x": 1.900000000000003,
         "y": 5.5412750825501655
       },
       "nextControl": null,
@@ -49,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "intakeSpeakerMid",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "sequential",
         "data": {
@@ -59,6 +59,18 @@
               "data": {
                 "name": "intake"
               }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.5
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
+              }
             }
           ]
         }
@@ -66,10 +78,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
     "velocity": 0,
