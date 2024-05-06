@@ -1,0 +1,141 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.8379113901084951,
+        "y": 4.4271562828839945
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.3216735004898588,
+        "y": 3.914075256721943
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.890235494756704,
+        "y": 2.697340251823362
+      },
+      "prevControl": {
+        "x": 1.5319700296790628,
+        "y": 3.49289573850659
+      },
+      "nextControl": {
+        "x": 3.9163975470827825,
+        "y": 2.096302478321944
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.724699735113756,
+        "y": 0.7769512681882514
+      },
+      "prevControl": {
+        "x": 8.109002503719292,
+        "y": 0.982183678653073
+      },
+      "nextControl": {
+        "x": 9.38877804374912,
+        "y": 0.5555918319764629
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.890235494756704,
+        "y": 2.697340251823362
+      },
+      "prevControl": {
+        "x": 3.869349728544472,
+        "y": 1.9979729419749568
+      },
+      "nextControl": {
+        "x": 2.0693058528974206,
+        "y": 3.2837185674371354
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5269059109546796,
+        "y": 3.914075256721943
+      },
+      "prevControl": {
+        "x": 2.139260495669899,
+        "y": 3.111664066185382
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.7,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2.25,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake 1.5",
+      "waypointRelativePos": 1.65,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.5
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 180.0
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "botStartMid",
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.55593454044051
+      "x": 0.8379113901084951,
+      "y": 4.4271562828839945
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "toFloor"
-          }
-        },
         {
           "type": "parallel",
           "data": {
@@ -24,13 +18,26 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "toSpeakerFlat"
+                  "name": "toSpeakerAngled"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "shoot"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -45,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "midSpeakerGetNote"
+            "pathName": "botGetMidNote"
           }
         },
         {

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.68,
-      "y": 4.35
+      "x": 0.9,
+      "y": 4.5
     },
     "rotation": -60.0
   },
@@ -12,9 +12,65 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "toFloor"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "toSpeakerAngled"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "toFloor"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "botSpeakerAuto"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "toSpeakerAngled"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "toFloor"
           }
         }
       ]

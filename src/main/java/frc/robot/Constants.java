@@ -6,9 +6,12 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -26,7 +29,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 3.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -121,5 +124,11 @@ public final class Constants {
   }
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+  public static final class ArmConstants {
+    public static final double speakerFrontAngle = 5.5;
+    public static final double speakerSideAngle = 4;
+    public static final double groundAngle = 0;
+    public static final double ampAngle = 34.5;
   }
 }

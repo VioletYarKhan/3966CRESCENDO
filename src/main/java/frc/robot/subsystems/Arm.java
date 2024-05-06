@@ -43,7 +43,7 @@ public class Arm extends SubsystemBase {
         if(armEncoder.getPosition() < (startAngle + 30)){
             armL.set(0.03);
             armR.set(-0.03);
-        } else {
+        } else if(armEncoder.getPosition() > (startAngle + 1))  {
             armL.set(0);
             armR.set(0);
         }

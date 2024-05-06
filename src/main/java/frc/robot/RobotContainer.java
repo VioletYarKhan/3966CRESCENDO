@@ -9,8 +9,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
@@ -22,8 +22,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.subsystems.Autos;
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -32,23 +33,30 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
  */
 public class RobotContainer {
     // The robot's subsystems
-    
-    private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+    public final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final Arm m_robotArm = new Arm();
     private final Shooter m_shooter = new Shooter();
     private final Intake m_intake = new Intake();
+    private final Autos m_autos = new Autos();
     // The driver's controller
     XboxController m_driverController = new XboxController(0);
     private double armMacroValue = m_robotArm.startAngle;
-    private double autoArmMacro = 0;
     private boolean wantedValueMet = false;
     private boolean macroUp = false;
-    private final SendableChooser<Command> autoChooser;
-
-  public RobotContainer() {
-
+    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    public Field2d m_field = new Field2d();
+    
     // Macros
-    ParallelCommandGroup shooterMacro = new ParallelCommandGroup(
+    public void computeMacroValues(double angle){
+        armMacroValue = (m_robotArm.startAngle + angle); 
+        if (m_robotArm.getEncoderValue() > armMacroValue){
+            macroUp = false;
+        } else {
+            macroUp = true;
+        }
+    }
+
+    public ParallelCommandGroup shooterMacro = new ParallelCommandGroup(
         new SequentialCommandGroup(
             new RunCommand(()->{
                 m_shooter.shooterBack();
@@ -56,7 +64,7 @@ public class RobotContainer {
 
             new RunCommand(()->{
                 m_shooter.shoot();
-            }, m_shooter).withTimeout(2.3),
+            }, m_shooter).withTimeout(1.3),
 
             new RunCommand(()->{
                 m_shooter.stopShoot();
@@ -70,65 +78,50 @@ public class RobotContainer {
             new RunCommand(()->{
                 m_intake.stopIntake();
             }
-            , m_intake).withTimeout(2.13),
+            , m_intake).withTimeout(1.1),
 
             new RunCommand(()->{
                 m_intake.intake();
-            }, m_intake).withTimeout(0.9)
+            }, m_intake).withTimeout(0.93)
         )
         
     );
 
-    SequentialCommandGroup armMacro = new SequentialCommandGroup(
+    public SequentialCommandGroup armMacro = new SequentialCommandGroup(
         new RunCommand(()->{
-            if (m_driverController.getYButton() || autoArmMacro == 1) {
-                armMacroValue = (m_robotArm.startAngle + 8.4); 
-                if (m_robotArm.getEncoderValue() > armMacroValue){
-                    macroUp = false;
-                } else {
-                    macroUp = true;
-                }
-            } else if (m_driverController.getXButton() || autoArmMacro == 2) {
-                armMacroValue = (m_robotArm.startAngle + 34.5);
-                if (m_robotArm.getEncoderValue() > (armMacroValue)){
-                    macroUp = false;
-                } else {
-                    macroUp = true;
-                }
-            } else if (m_driverController.getAButton() || autoArmMacro == 3) {
-                armMacroValue = (m_robotArm.startAngle);
-                if (m_robotArm.getEncoderValue() > (armMacroValue - 0.2)){
-                    macroUp = false;
-                } else {
-                    macroUp = true;
-                }
-            } else if (m_driverController.getBButton() || autoArmMacro == 4) {
-                armMacroValue = (m_robotArm.startAngle + 6.4);
-                if (m_robotArm.getEncoderValue() > (armMacroValue)){
-                    macroUp = false;
-                } else {
-                    macroUp = true;
-                }
+            if (m_driverController.getYButton()){
+                computeMacroValues(ArmConstants.speakerFrontAngle);
+            } else if (m_driverController.getXButton()){
+                computeMacroValues(ArmConstants.ampAngle);
+            } else if (m_driverController.getAButton()){
+                computeMacroValues(ArmConstants.groundAngle);
+            } else if (m_driverController.getBButton()){
+                computeMacroValues(ArmConstants.speakerSideAngle);
             }
             if (macroUp){
                 m_robotArm.armUpMacro();
             } else {
                 m_robotArm.armDownMacro();
             }
+            if ((shooterMacro.isScheduled() != true) && (armMacroValue > m_robotArm.startAngle + 1)){
+                if (Math.abs(armMacroValue - m_robotArm.getEncoderValue()) < 8){
+                    shooterMacro.schedule();
+                }
+            }
             wantedValueMet = (((m_robotArm.getEncoderValue() >= armMacroValue - 0.05) && (macroUp)) || ((m_robotArm.getEncoderValue() <= armMacroValue + 0.1) && !(macroUp)));
-            autoArmMacro = 0;
-        }, m_robotArm).until(()-> (wantedValueMet || (m_robotArm.getEncoderValue() < m_robotArm.startAngle - 5) || (m_robotArm.getEncoderValue() > m_robotArm.startAngle + 37))));
+        }, m_robotArm).until(()-> (wantedValueMet || (m_robotArm.getEncoderValue() < m_robotArm.startAngle - 5) || (m_robotArm.getEncoderValue() > m_robotArm.startAngle + 37))).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
         
 
-    // Auto Commands
-    NamedCommands.registerCommand("toFloor", new RunCommand(()->{autoArmMacro = 3;armMacro.schedule();}).asProxy().until(()-> (wantedValueMet || (m_robotArm.getEncoderValue() < m_robotArm.startAngle - 5) || (m_robotArm.getEncoderValue() > m_robotArm.startAngle + 37))));
-    NamedCommands.registerCommand("toAmp", new RunCommand(()->{autoArmMacro = 2;armMacro.schedule();}).asProxy().until(()-> (wantedValueMet || (m_robotArm.getEncoderValue() < m_robotArm.startAngle - 5) || (m_robotArm.getEncoderValue() > m_robotArm.startAngle + 37))));
-    NamedCommands.registerCommand("toSpeakerFlat", new RunCommand(()->{autoArmMacro = 1;armMacro.schedule();}).asProxy().until(()-> (wantedValueMet || (m_robotArm.getEncoderValue() < m_robotArm.startAngle - 5) || (m_robotArm.getEncoderValue() > m_robotArm.startAngle + 37))));
-    NamedCommands.registerCommand("toSpeakerAngled", new RunCommand(()->{autoArmMacro = 4;armMacro.schedule();}).asProxy().until(()-> (wantedValueMet || (m_robotArm.getEncoderValue() < m_robotArm.startAngle - 5) || (m_robotArm.getEncoderValue() > m_robotArm.startAngle + 37))));
-    NamedCommands.registerCommand("shoot", new RunCommand(()->{shooterMacro.schedule();}).asProxy().withTimeout(3.1));
-    NamedCommands.registerCommand("intake", new RunCommand(()->m_intake.intake(), m_intake).asProxy().withTimeout(0.4));
-    NamedCommands.registerCommand("stopShoot", new RunCommand(()-> {m_shooter.stopShoot();}, m_shooter).asProxy().withTimeout(0.2));
-    NamedCommands.registerCommand("stopIntake", new RunCommand(()-> {m_intake.stopIntake();}, m_intake).asProxy().withTimeout(0.2));
+        public RunCommand autoIntake = new RunCommand(()-> {
+            m_intake.intake();
+        }, m_intake);
+
+
+  public RobotContainer() {
+    // Data
+    SmartDashboard.putNumber("Arm Encoder", m_robotArm.getEncoderValue());
+    SmartDashboard.putNumber("Arm Encoder Start", m_robotArm.startAngle);
+    SmartDashboard.putData("Field", m_field);
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -146,12 +139,11 @@ public class RobotContainer {
             m_robotDrive));
     m_robotArm.setDefaultCommand(
             new RunCommand(() -> {
-                SmartDashboard.putNumber("Arm Encoder", m_robotArm.getEncoderValue());
-                SmartDashboard.putNumber("Arm Encoder Start", m_robotArm.startAngle);
                 if (armMacro.isScheduled() != true){
                     if (m_driverController.getYButtonPressed() || m_driverController.getXButtonPressed() || m_driverController.getAButtonPressed() || m_driverController.getBButtonPressed()){
                         armMacro.schedule();
-                    } else {
+                    }
+                    else {
                         if (m_driverController.getPOV() == 0) {
                             m_robotArm.armUp();
                         } else if (m_driverController.getPOV() == 180) {
@@ -196,7 +188,8 @@ public class RobotContainer {
         }
     }, m_intake));
 
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser.setDefaultOption("None", new RunCommand((()-> m_robotDrive.setX()), m_robotDrive));
+    autoChooser.addOption("Spiky Auto", new RunCommand(()-> {m_autos.spikyAuto.schedule();}));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

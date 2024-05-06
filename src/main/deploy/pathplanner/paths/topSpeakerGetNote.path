@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8,
-        "y": 6.65
+        "x": 1.1,
+        "y": 6.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2999999999999998,
-        "y": 7.516025403784439
+        "x": 1.35,
+        "y": 6.93301270189222
       },
       "isLocked": false,
       "linkedName": "topSpeaker"
     },
     {
       "anchor": {
-        "x": 2.6213759570376287,
-        "y": 7.033697400728134
+        "x": 2.597046336949817,
+        "y": 6.977901955803912
       },
       "prevControl": {
-        "x": 1.4276038075885675,
-        "y": 7.009083541976608
+        "x": 1.4032741875007557,
+        "y": 6.953288097052391
       },
       "nextControl": {
-        "x": 3.4781839422628895,
-        "y": 7.051363544753397
+        "x": 3.453854322175078,
+        "y": 6.995568099829175
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.1,
-        "y": 6.5
+        "x": 1.4,
+        "y": 6.35
       },
       "prevControl": {
-        "x": 1.6806929375763517,
-        "y": 7.497499304522418
+        "x": 1.9806929375763516,
+        "y": 7.347499304522418
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
     {
       "waypointRelativePos": 0.9,
       "rotationDegrees": 0,
-      "rotateFast": false
+      "rotateFast": true
     }
   ],
   "constraintZones": [],

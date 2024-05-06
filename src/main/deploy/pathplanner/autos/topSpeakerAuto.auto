@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8,
-      "y": 6.65
+      "x": 1.1,
+      "y": 6.5
     },
     "rotation": 60.0
   },
@@ -12,35 +12,34 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "named",
+          "data": {
+            "name": "toFloor"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "toSpeakerAngled"
-                      }
-                    }
-                  ]
+                  "name": "toSpeakerAngled"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "toFloor"
+                  "name": "shoot"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "toFloor"
           }
         },
         {
@@ -50,35 +49,28 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "toSpeakerAngled"
-                      }
-                    }
-                  ]
+                  "name": "toSpeakerAngled"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "toFloor"
+                  "name": "shoot"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "toFloor"
           }
         }
       ]
