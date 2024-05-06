@@ -188,7 +188,7 @@ public class RobotContainer {
         }
     }, m_intake));
 
-    autoChooser.setDefaultOption("None", new RunCommand((()-> m_robotDrive.setX())));
+    autoChooser.setDefaultOption("None", new RunCommand((()-> m_robotDrive.setX()), m_robotDrive));
     autoChooser.addOption("Spiky Auto", new RunCommand(()-> {m_autos.spikyAuto.schedule();}));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
