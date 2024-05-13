@@ -29,8 +29,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    SmartDashboard.putNumber("Drive Speed", 3.8);
-    SmartDashboard.putNumber("Shoot Speed", 0.9);
   }
 
   /**
