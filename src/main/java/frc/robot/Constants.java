@@ -37,7 +37,7 @@ public final class Constants {
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(27); // Connor's fault if this number is wrong
+    public static final double kTrackWidth = Units.inchesToMeters(27);
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(27);
     // Distance between front and back wheels on robot
@@ -130,5 +130,8 @@ public final class Constants {
     public static final double speakerSideAngle = 4;
     public static final double groundAngle = 0;
     public static final double ampAngle = 34.5;
+    public static final double bottomConstraint = -5.0;
+    public static final double topConstraint = 35.0;
+    public static final double gearRatio = 120;
   }
 }

@@ -2,7 +2,7 @@
   {
     "name": "/SmartDashboard/Input Angle",
     "type": "double",
-    "value": 15.0,
+    "value": 30.0,
     "properties": {
       "cached": true,
       "persistent": true,

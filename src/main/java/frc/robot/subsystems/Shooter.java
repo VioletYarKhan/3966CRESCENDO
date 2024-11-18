@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -8,16 +9,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
     CANSparkMax shooterL = new CANSparkMax(10, MotorType.kBrushless);
     CANSparkMax shooterR = new CANSparkMax(11, MotorType.kBrushless);
+    RelativeEncoder shooterEncoder = shooterL.getEncoder();
+
 
     public Shooter(){
         shooterL.setInverted(true);
         shooterR.setInverted(true);
         shooterL.setIdleMode(CANSparkMax.IdleMode.kBrake);
         shooterR.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    }
+        SmartDashboard.putNumber("Max Speed", 0);
+    } 
     
     public void shoot() {
-        shooterL.set(SmartDashboard.getNumber("Shoot Speed", 0.9)); // between 0.9 and 0.97 is comp speeds;
+        shooterL.set(SmartDashboard.getNumber("Shoot Speed", 0.9)); // between 0.9 and 0.97 is comp speeds
         shooterR.set(SmartDashboard.getNumber("Shoot Speed", 0.9)); // between 0.9 and 0.97 is comp speeds
     }
     
@@ -31,4 +35,7 @@ public class Shooter extends SubsystemBase {
         shooterR.set(-0.8);
     }
 
+    public double getCurrentSpeed(){
+        return shooterEncoder.getVelocity();
+    }
 }
