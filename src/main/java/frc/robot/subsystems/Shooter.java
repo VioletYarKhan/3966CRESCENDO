@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
     CANSparkMax shooterL = new CANSparkMax(10, MotorType.kBrushless);
     CANSparkMax shooterR = new CANSparkMax(11, MotorType.kBrushless);
-    RelativeEncoder shooterEncoder = shooterL.getEncoder();
+    RelativeEncoder shooterEncoderL = shooterL.getEncoder();
+    RelativeEncoder shooterEncoderR = shooterR.getEncoder();
+
 
 
     public Shooter(){
@@ -17,7 +19,6 @@ public class Shooter extends SubsystemBase {
         shooterR.setInverted(true);
         shooterL.setIdleMode(CANSparkMax.IdleMode.kBrake);
         shooterR.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        SmartDashboard.putNumber("Max Speed", 0);
     } 
     
     public void shoot() {
@@ -36,6 +37,6 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getCurrentSpeed(){
-        return shooterEncoder.getVelocity();
+        return (shooterEncoderL.getVelocity() + shooterEncoderR.getVelocity())/2;
     }
 }

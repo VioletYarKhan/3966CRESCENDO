@@ -1,12 +1,1 @@
-[
-  {
-    "name": "/SmartDashboard/Input Angle",
-    "type": "double",
-    "value": 15.0,
-    "properties": {
-      "cached": true,
-      "persistent": true,
-      "retained": true
-    }
-  }
-]
+[]
