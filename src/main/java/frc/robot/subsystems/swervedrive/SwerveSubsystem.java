@@ -4,13 +4,6 @@
 
 package frc.robot.subsystems.swervedrive;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-import com.pathplanner.lib.util.PIDConstants;
-
 /*
 import com.pathplanner.lib.Const;
 import com.pathplanner.lib.PathPlanner;
@@ -48,11 +41,6 @@ public class SwerveSubsystem extends SubsystemBase
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
   public  double            maximumSpeed = Units.feetToMeters(14.5);
-  /**
-   * The auto builder for PathPlanner, there can only ever be one created so we save it just incase we generate multiple
-   * paths with events.
-   */
-  private AutoBuilder autoBuilder  = null;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
