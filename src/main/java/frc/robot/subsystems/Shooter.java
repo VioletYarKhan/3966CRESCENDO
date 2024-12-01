@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
     
     public void stopShoot() {
         shooterL.set(0.0);
-        shooterR.set(-0.0);
+        shooterR.set(0.0);
     }
 
     public void shooterBack(){
