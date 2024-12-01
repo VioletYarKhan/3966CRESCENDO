@@ -52,7 +52,7 @@ public class RobotContainer {
 
             new RunCommand(()->{
                 m_shooter.shoot();
-            }, m_shooter).until(()->m_shooter.getCurrentSpeed() > SmartDashboard.getNumber("Shoot Speed", 0.9) * 4.5),
+            }, m_shooter).until(()->m_shooter.getCurrentSpeed() > SmartDashboard.getNumber("Shoot Speed", 0.9)),
 
             new RunCommand(()->{
                 m_shooter.shoot();
@@ -70,7 +70,7 @@ public class RobotContainer {
             new RunCommand(()->{
                 m_intake.stopIntake();
             }
-            , m_intake).until(()->m_shooter.getCurrentSpeed() > SmartDashboard.getNumber("Shoot Speed", 0.9) * 4.5),
+            , m_intake).until(()->m_shooter.getCurrentSpeed() > SmartDashboard.getNumber("Shoot Speed", 0.9)),
 
             new RunCommand(()->{
                 m_intake.intake();
@@ -112,22 +112,25 @@ public class RobotContainer {
                 if (m_driverController.getPOV() == 0) {
                     m_robotArm.armUp(); 
                 } else if (m_driverController.getPOV() == 180) {
-                    m_robotArm.armDown();
-                } /*else if (m_driverController.getYButton()){
-                    m_robotArm.setArmPosition(ArmConstants.speakerFrontAngle);
-                } else if (m_driverController.getXButton()){
-                    m_robotArm.setArmPosition(ArmConstants.ampAngle);
-                } else if (m_driverController.getAButton()){
-                    m_robotArm.setArmPosition(ArmConstants.groundAngle);
-                } else if (m_driverController.getBButton()){
-                    m_robotArm.setArmPosition(ArmConstants.speakerSideAngle);
-                }*/
-                if (m_driverController.getPOV() == 270){
-                    m_robotArm.zeroOffset();
-                }
-                m_robotArm.moveToPosition();
-            }, m_robotArm)
-        );
+                        m_robotArm.armDown();
+                    } else {
+                        if (m_driverController.getYButton()){
+                            m_robotArm.setArmPosition(ArmConstants.speakerFrontAngle);
+                        } else if (m_driverController.getXButton()){
+                            m_robotArm.setArmPosition(ArmConstants.ampAngle);
+                        } else if (m_driverController.getAButton()){
+                            m_robotArm.setArmPosition(ArmConstants.groundAngle);
+                        } else if (m_driverController.getBButton()){
+                            m_robotArm.setArmPosition(ArmConstants.speakerSideAngle);
+                        }
+                        if (m_driverController.getPOV() == 270){
+                            m_robotArm.zeroOffset();
+                        }
+                        m_robotArm.moveToPosition();
+                    }
+                
+                }, m_robotArm)
+            );
 
 
     m_shooter.setDefaultCommand(new RunCommand(() -> {

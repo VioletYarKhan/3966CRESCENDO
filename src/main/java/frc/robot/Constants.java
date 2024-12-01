@@ -128,7 +128,7 @@ public final class Constants {
   public static final class ArmConstants {
     public static final double speakerFrontAngle = 5.5;
     public static final double speakerSideAngle = 4;
-    public static final double groundAngle = 0;
+    public static final double groundAngle = 0.4;
     public static final double ampAngle = 34.5;
     public static final double bottomConstraint = -5.0;
     public static final double topConstraint = 35.0;
