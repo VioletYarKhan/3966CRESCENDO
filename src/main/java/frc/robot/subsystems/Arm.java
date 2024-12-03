@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.util.Units;
 
 public class Arm extends SubsystemBase {
@@ -23,7 +22,7 @@ public class Arm extends SubsystemBase {
     private static final double kI = 0;
     private static final double kD = 0.003;
     private static final double kFF = 0.1;
-    private static final double kTolerance = 0.1;
+    private static final double kTolerance = 0.05;
     public double currentPosition = (armEncoderL.getPosition() + armEncoderR.getPosition()) / 2;
     private double setpoint = currentPosition;
     public double offset = 0.0;
@@ -44,8 +43,8 @@ public class Arm extends SubsystemBase {
         armPidR.setSmartMotionAllowedClosedLoopError(kTolerance, 0);
         armPidL.setSmartMotionAllowedClosedLoopError(kTolerance, 0);
 
-        armPidR.setOutputRange(-0.3, 0.3);
-        armPidL.setOutputRange(-0.3, 0.3);
+        armPidR.setOutputRange(-0.1, 0.2);
+        armPidL.setOutputRange(-0.1, 0.2);
         /*
         armEncoderL.setVelocityConversionFactor(1);
         armEncoderR.setVelocityConversionFactor(1);
@@ -77,14 +76,12 @@ public class Arm extends SubsystemBase {
             armPidL.setReference(setpoint, ControlType.kPosition);
             armPidR.setReference(setpoint, ControlType.kPosition);
         } else {
-            armL.set(-0.5 * armEncoderL.getVelocity());
-            armR.set(-0.5 * armEncoderR.getVelocity());
+            armL.set(0.0);
+            armR.set(0.0);
         }
         SmartDashboard.putNumber("Query Angle", setpoint);
-        SmartDashboard.putNumber("Arm Speed", ((armEncoderL.getVelocity() + armEncoderR.getVelocity())/2)*armEncoderL.getVelocityConversionFactor());
+        SmartDashboard.putNumber("Arm Speed", ((armEncoderL.getVelocity() + armEncoderR.getVelocity())/2));
         SmartDashboard.putNumber("Arm Position", currentPosition);
-        SmartDashboard.putNumber("LEncoder thingy multiplier", armEncoderL.getVelocityConversionFactor());
-        SmartDashboard.putNumber("REncoder thingy multiplier", armEncoderR.getVelocityConversionFactor());
     }
 
     public void armUp() {

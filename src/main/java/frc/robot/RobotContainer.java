@@ -6,6 +6,8 @@
 package frc.robot;
 
 
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -15,7 +17,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -35,7 +36,7 @@ public class RobotContainer {
     public final Arm m_robotArm = new Arm();
     public final Shooter m_shooter = new Shooter();
     public final Intake m_intake = new Intake();
-    // public final Limelight m_limelight = new Limelight();
+    public final Vision m_Vision = new Vision();
     // The driver's controller
 
     XboxController m_driverController = new XboxController(0);
@@ -101,11 +102,20 @@ public class RobotContainer {
                 m_field.setRobotPose(m_robotDrive.getPose());
                 if (m_driverController.getRightBumper()){
                     m_robotDrive.setX();
-                } else{
-                m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband), true, true);}},
+                } else {
+                    double forward = m_driverController.getLeftY();
+                    double strafe = m_driverController.getLeftX();
+                    double turn = m_driverController.getRightX();
+                    PhotonPipelineResult result = m_Vision.ProcessFrame();
+                    
+                    if(m_driverController.getStartButton()){
+                        turn = m_Vision.targetYaw(result, 7);
+                    }
+
+                    m_robotDrive.drive(
+                    -MathUtil.applyDeadband(forward, OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(strafe, OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(turn, OIConstants.kDriveDeadband), true, true);}},
             m_robotDrive));
     m_robotArm.setDefaultCommand(
             new RunCommand(() -> {
