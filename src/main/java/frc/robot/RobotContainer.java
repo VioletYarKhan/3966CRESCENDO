@@ -5,8 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,12 +18,9 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.Constants.VisionConstants;
 
 import java.io.File;
 
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -62,14 +57,14 @@ public class RobotContainer{
     drivebase.setDefaultCommand(
         new RunCommand(() -> {
             if (driverXbox.getStartButton()) {
-                double requestedYaw = m_Vision.targetYaw(7);
-                if(requestedYaw != 0){
+                double requestedYawChange = m_Vision.targetYaw(7);
+                if(requestedYawChange != 0){
                     new TeleopDrive(
-                    drivebase,
+                    drivebase, 
                     () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
                     () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
                     // Turn directly towards the target
-                    () -> (requestedYaw) * 0.01, () -> true).schedule();
+                    () -> (requestedYawChange) * 0.01, () -> true).schedule();
                 }
             } else {
                 new TeleopDrive(
