@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -22,7 +23,7 @@ public class Arm extends SubsystemBase {
     private static final double kI = 0;
     private static final double kD = 0.003;
     private static final double kFF = 0.1;
-    private static final double kTolerance = 0.05;
+    private static final double kTolerance = 0.01;
     public double currentPosition = (armEncoderL.getPosition() + armEncoderR.getPosition()) / 2;
     private double setpoint = currentPosition;
     public double offset = 0.0;
@@ -43,8 +44,8 @@ public class Arm extends SubsystemBase {
         armPidR.setSmartMotionAllowedClosedLoopError(kTolerance, 0);
         armPidL.setSmartMotionAllowedClosedLoopError(kTolerance, 0);
 
-        armPidR.setOutputRange(-0.1, 0.2);
-        armPidL.setOutputRange(-0.1, 0.2);
+        armPidR.setOutputRange(-0.15, 0.3);
+        armPidL.setOutputRange(-0.15, 0.3);
         /*
         armEncoderL.setVelocityConversionFactor(1);
         armEncoderR.setVelocityConversionFactor(1);
@@ -59,7 +60,7 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * @param targetAngle is the encoder position requested by the driver
+     * @param targetAngle is the encoder position requested
      */
     public void setArmPosition(double targetAngle) {
         setpoint = offset + targetAngle;
@@ -76,11 +77,11 @@ public class Arm extends SubsystemBase {
             armPidL.setReference(setpoint, ControlType.kPosition);
             armPidR.setReference(setpoint, ControlType.kPosition);
         } else {
-            armL.set(0.0);
-            armR.set(0.0);
+            armL.set(0.03);
+            armR.set(0.03);
         }
         SmartDashboard.putNumber("Query Angle", setpoint);
-        SmartDashboard.putNumber("Arm Speed", ((armEncoderL.getVelocity() + armEncoderR.getVelocity())/2));
+        SmartDashboard.putNumber("Arm Speed", ((armEncoderL.getVelocity() + armEncoderR.getVelocity())/2)/armEncoderL.getVelocityConversionFactor());
         SmartDashboard.putNumber("Arm Position", currentPosition);
     }
 
@@ -109,5 +110,12 @@ public class Arm extends SubsystemBase {
 
     public double getArmPosition() {
         return Units.rotationsToRadians((currentPosition / ArmConstants.gearRatio) + offset);
+    }
+
+    public boolean isWithinError(){
+        if(Math.abs(currentPosition-setpoint) < 0.1){
+            return true;
+        }
+        return false;
     }
 }

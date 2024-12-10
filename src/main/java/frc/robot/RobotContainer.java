@@ -6,23 +6,22 @@
 package frc.robot;
 
 
-import org.photonvision.targeting.PhotonPipelineResult;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.Combinations.aimShoot;
+import frc.robot.commands.Shooter.shootCommands;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ArmConstants;
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -36,7 +35,7 @@ public class RobotContainer {
     public final Arm m_robotArm = new Arm();
     public final Shooter m_shooter = new Shooter();
     public final Intake m_intake = new Intake();
-    public final Vision m_Vision = new Vision();
+    // public final Limelight m_limelight = new Limelight();
     // The driver's controller
 
     XboxController m_driverController = new XboxController(0);
@@ -44,41 +43,7 @@ public class RobotContainer {
     public Field2d m_field = new Field2d();
     
     // Macros
-
-    public ParallelCommandGroup shooterMacro = new ParallelCommandGroup(
-        new SequentialCommandGroup(
-            new RunCommand(()->{
-                m_shooter.shooterBack();
-            }, m_shooter).withTimeout(0.1),
-
-            new RunCommand(()->{
-                m_shooter.shoot();
-            }, m_shooter).until(()->m_shooter.getCurrentSpeed() > SmartDashboard.getNumber("Shoot Speed", 0.9)),
-
-            new RunCommand(()->{
-                m_shooter.shoot();
-            }, m_shooter).withTimeout(0.3),
-
-            new RunCommand(()->{
-                m_shooter.stopShoot();
-            }, m_shooter).withTimeout(0.03)
-        ),
-        new SequentialCommandGroup(
-            new RunCommand(()->{
-                m_intake.intakeBack();
-            }, m_intake).withTimeout(0.07),
-
-            new RunCommand(()->{
-                m_intake.stopIntake();
-            }
-            , m_intake).until(()->m_shooter.getCurrentSpeed() > SmartDashboard.getNumber("Shoot Speed", 0.9)),
-
-            new RunCommand(()->{
-                m_intake.intake();
-            }, m_intake).withTimeout(0.33)
-        )
-        
-    );
+    ParallelCommandGroup manualShoot = new shootCommands(m_shooter, m_intake).shootMacro;
         
 
     public RunCommand autoIntake = new RunCommand(()-> {
@@ -102,42 +67,33 @@ public class RobotContainer {
                 m_field.setRobotPose(m_robotDrive.getPose());
                 if (m_driverController.getRightBumper()){
                     m_robotDrive.setX();
-                } else {
-                    double forward = m_driverController.getLeftY();
-                    double strafe = m_driverController.getLeftX();
-                    double turn = m_driverController.getRightX();
-                    PhotonPipelineResult result = m_Vision.ProcessFrame();
-                    
-                    if(m_driverController.getStartButton()){
-                        turn = m_Vision.targetYaw(result, 7);
-                    }
-
-                    m_robotDrive.drive(
-                    -MathUtil.applyDeadband(forward, OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(strafe, OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(turn, OIConstants.kDriveDeadband), true, true);}},
+                } else{
+                m_robotDrive.drive(
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband), true, true);}},
             m_robotDrive));
     m_robotArm.setDefaultCommand(
             new RunCommand(() -> {
-                if (m_driverController.getPOV() == 0) {
-                    m_robotArm.armUp(); 
+                    if (m_driverController.getPOV() == 0) {
+                    m_robotArm.armUp();
                 } else if (m_driverController.getPOV() == 180) {
-                        m_robotArm.armDown();
-                    } else {
-                        if (m_driverController.getYButton()){
-                            m_robotArm.setArmPosition(ArmConstants.speakerFrontAngle);
-                        } else if (m_driverController.getXButton()){
-                            m_robotArm.setArmPosition(ArmConstants.ampAngle);
-                        } else if (m_driverController.getAButton()){
-                            m_robotArm.setArmPosition(ArmConstants.groundAngle);
-                        } else if (m_driverController.getBButton()){
-                            m_robotArm.setArmPosition(ArmConstants.speakerSideAngle);
-                        }
-                        if (m_driverController.getPOV() == 270){
-                            m_robotArm.zeroOffset();
-                        }
-                        m_robotArm.moveToPosition();
-                    }
+                    m_robotArm.armDown();
+                } else {
+                m_robotArm.moveToPosition(); 
+                if (m_driverController.getYButton()){
+                    new aimShoot(m_shooter, m_intake, m_robotArm, ArmConstants.speakerFrontAngle).aimShootMacro.schedule();
+                } else if (m_driverController.getXButton()){
+                    new aimShoot(m_shooter, m_intake, m_robotArm, ArmConstants.ampAngle).aimShootMacro.schedule();
+                } else if (m_driverController.getAButton()){
+                    new aimShoot(m_shooter, m_intake, m_robotArm, ArmConstants.groundAngle).aimShootMacro.schedule();
+                } else if (m_driverController.getBButton()){
+                    new aimShoot(m_shooter, m_intake, m_robotArm, ArmConstants.speakerSideAngle).aimShootMacro.schedule();
+                }
+                }
+                if (m_driverController.getPOV() == 270){
+                    m_robotArm.zeroOffset();
+                }
                 
                 }, m_robotArm)
             );
@@ -145,30 +101,26 @@ public class RobotContainer {
 
     m_shooter.setDefaultCommand(new RunCommand(() -> {
         SmartDashboard.putNumber("Shooter Speed", m_shooter.getCurrentSpeed());
-        if (shooterMacro.isScheduled() != true){
-            if (m_driverController.getRightTriggerAxis() > 0.5){
-                shooterMacro.schedule();
+        if (m_driverController.getRightTriggerAxis() > 0.5){
+            manualShoot.schedule();
+        } else {
+            if (m_driverController.getPOV() == 90){
+                m_shooter.shoot();
+            } else if (m_driverController.getLeftBumper()){
+                m_shooter.shooterBack();
             } else {
-                if (m_driverController.getPOV() == 90){
-                    m_shooter.shoot();
-                } else if (m_driverController.getLeftBumper()){
-                    m_shooter.shooterBack();
-                } else {
-                    m_shooter.stopShoot();
-                }
+                m_shooter.stopShoot();
             }
         }
     }, m_shooter));
 
     m_intake.setDefaultCommand(new RunCommand(()-> {
-        if (shooterMacro.isScheduled() != true){
-            if (m_driverController.getLeftTriggerAxis() > 0.5) {
-                    m_intake.intake();
-            } else if (m_driverController.getLeftBumper()){
-                m_intake.intakeBack();
-            } else {
-                m_intake.stopIntake();
-            }
+        if (m_driverController.getLeftTriggerAxis() > 0.5) {
+                m_intake.intake();
+        } else if (m_driverController.getLeftBumper()){
+            m_intake.intakeBack();
+        } else {
+            m_intake.stopIntake();
         }
     }, m_intake));
 
