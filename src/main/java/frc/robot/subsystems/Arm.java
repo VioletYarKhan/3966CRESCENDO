@@ -44,8 +44,8 @@ public class Arm extends SubsystemBase {
         armPidR.setSmartMotionAllowedClosedLoopError(kTolerance, 0);
         armPidL.setSmartMotionAllowedClosedLoopError(kTolerance, 0);
 
-        armPidR.setOutputRange(-0.3, 0.3);
-        armPidL.setOutputRange(-0.3, 0.3);
+        armPidR.setOutputRange(-0.15, 0.3);
+        armPidL.setOutputRange(-0.25, 0.3);
         /*
         armEncoderL.setVelocityConversionFactor(1);
         armEncoderR.setVelocityConversionFactor(1);
@@ -77,8 +77,8 @@ public class Arm extends SubsystemBase {
             armPidL.setReference(setpoint, ControlType.kPosition);
             armPidR.setReference(setpoint, ControlType.kPosition);
         } else {
-            armL.set(-0.5 * armEncoderL.getVelocity());
-            armR.set(-0.5 * armEncoderR.getVelocity());
+            armL.set(0.03);
+            armR.set(0.03);
         }
         SmartDashboard.putNumber("Query Angle", setpoint);
         SmartDashboard.putNumber("Arm Speed", ((armEncoderL.getVelocity() + armEncoderR.getVelocity())/2)*armEncoderL.getVelocityConversionFactor());
